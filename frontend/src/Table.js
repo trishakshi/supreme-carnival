@@ -2,66 +2,45 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 
 const Table = () => {
-    const [userData, setUserData] = useState([])
-    const [loggedUser, setLoggedUser] = useState()
+    const [title, setTitle] = useState('')
+    const [description, setDescription] = useState('')
+    const [hashTag, setHashTag] = useState('')
+    const [image, setImage] = useState('')
 
-    useEffect(() => {
-        getUserData()
-        getLoggedUser()
-    }, []);
+    const upload = async (e) => {
+        e.preventDefault()
+        const formData = new FormData()
 
-    const getUserData = async () => {
-        const res = await axios.get(`http://localhost:8080/auth/users`)
-        setUserData(res.data)
-    }
+        formData.append("title", title)
+        formData.append("image", image)
+        formData.append("description", description)
+        formData.append("hashTag", hashTag)
 
-    const getLoggedUser = async () => {
-        const res = await axios.get(`http://localhost:8080/auth/loggedUser`)
-        setLoggedUser(res.data)
-    }
-
-    const approve = async() => {
-        const status = {
-            status: "approved"
-        }
-
-        await axios.put(`http://localhost:8080/auth/users/${loggedUser._id}`, status)
-    }
-    const reject = async() => {
-        const status = {
-            status: "rejected"
-        }
-
-        await axios.put(`http://localhost:8080/auth/users/${loggedUser._id}`, status)
+        await axios.post(`http://localhost:8080/media/upload`, formData)
     }
     return (
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Phone Number</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                {userData.map((data, index) => {
-                    return <tr>
-                        <th scope="row">{index + 1}</th>
-                        <td>{data.name}</td>
-                        <td>{data.phoneNumber}</td>
-                        <td>{data.email}</td>
-                        <td>{data.status}</td>
-                        <td>
-                            <button onClick={approve} type="submit" class="btn btn-success">Approve</button>
-                            <button onClick={reject} type="submit" class="btn btn btn-danger">Reject</button>
-                        </td>
-                    </tr>
-                })}
+        <div style={{ width: "300px", margin: " 50px auto" }}>
 
-            </tbody>
-        </table>
+            <form onSubmit={upload} encType='multipart/form-data'>
+                <div class="mb-3">
+                    <label for="image" class="form-label">Choose File</label>
+                    <input filename="image" type="file" class="form-control" id="image" onChange={(e) => setImage(e.target.files[0])} />
+                </div>
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input value={title} onChange={(e) => setTitle(e.target.value)} type="text" class="form-control" id="title" />
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <input value={description} onChange={(e) => setDescription(e.target.value)} type="text" class="form-control" id="description" />
+                </div>
+                <div class="mb-3">
+                    <label for="hashtag" class="form-label">Hashtag</label>
+                    <input value={hashTag} onChange={(e) => setHashTag(e.target.value)} type="text" class="form-control" id="hashtag" />
+                </div>
+                <button type="submit" class="btn btn-primary">Upload</button>
+            </form>
+        </div>
     )
 }
 

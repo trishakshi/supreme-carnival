@@ -20,3 +20,4 @@ app.listen(PORT, () => console.log(`Server is running on port : ${PORT}`));
 mongoose.connect(process.env.MONGO_URI, () => console.log('Connected to MONGO DB'))
 
 app.use('/auth', require('./routes/userRoute'))
+app.use('/media', require('./routes/mediaRoute'))

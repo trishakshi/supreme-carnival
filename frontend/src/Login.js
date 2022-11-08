@@ -8,7 +8,8 @@ const Login = () => {
 
     const navigate = useNavigate()
 
-    const login = async () => {
+    const login = async (e) => {
+        e.preventDefault()
         const data = {
             email: email,
             password: password
