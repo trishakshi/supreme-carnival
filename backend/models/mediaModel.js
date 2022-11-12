@@ -11,6 +11,17 @@ const mediaSchema = new Schema({
     timestamps: true
 })
 
-const Media = mongoose.model('media', mediaSchema);
+const personalizedSchema = new Schema({
+    image: {type: String},
+    userId: {type: Schema.Types.ObjectId}
+}, {
+    timestamps: true
+})
 
-module.exports = Media;
+const Media = mongoose.model('media', mediaSchema);
+const Personalized = mongoose.model('personalized', personalizedSchema)
+
+module.exports = {
+    Media: Media,
+    Personalized: Personalized
+}

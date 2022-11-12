@@ -7,7 +7,8 @@ const userSchema = new Schema({
     email: { type: String },
     status: { type: String, required: true },
     passwordHash: { type: String },
-    roleId: { type: String }
+    roleId: { type: String },
+    token: {type: String}
 }, {
     timestamps: true
 })
